@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>B2 時制 & 前置詞 ドリル</title>
+<style>
+  :root {
+    --navy: #1C3148;
+    --teal: #2A7F6F;
+    --teal-light: #E0F2EE;
+    --orange: #D4722A;
+    --orange-light: #FDF0E8;
+    --green: #27AE60;
+    --green-light: #EAF7EE;
+    --red: #C0392B;
+    --red-light: #FDECEB;
+    --gray: #8A9BB0;
+    --border: #DDE4EE;
+    --bg: #F2F5F9;
+    --card: #FFFFFF;
+    --text: #2C3E50;
+    --purple: #6A3FAF;
+    --purple-light: #EDE6F7;
+    --blue: #1A6A9A;
+    --blue-light: #E8F4FD;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  /* ===== HOME ===== */
+  #home { display: flex; flex-direction: column; align-items: center; padding: 36px 20px 60px; min-height: 100vh; }
+  .home-title-sub { font-size: 11px; letter-spacing: 3px; color: var(--gray); text-transform: uppercase; text-align: center; margin-bottom: 10px; }
+  .home-title { font-size: 26px; font-weight: 800; color: var(--navy); text-align: center; line-height: 1.3; margin-bottom: 8px; }
+  .home-sub { color: var(--gray); font-size: 13px; text-align: center; line-height: 1.6; margin-bottom: 28px; }
+  .stats-row { display: flex; gap: 10px; width: 100%; max-width: 400px; margin-bottom: 24px; }
+  .stat-box { flex: 1; background: var(--card); border-radius: 12px; padding: 14px 8px; text-align: center; border: 1.5px solid var(--border); }
+  .stat-num { font-size: 22px; font-weight: 800; }
+  .stat-label { font-size: 10px; color: var(--gray); margin-top: 2px; }
+  .filter-card { background: var(--card); border-radius: 16px; padding: 20px; border: 1.5px solid var(--border); width: 100%; max-width: 400px; margin-bottom: 18px; }
+  .filter-label { font-size: 11px; font-weight: 700; color: var(--gray); letter-spacing: 2px; margin-bottom: 8px; }
+  .filter-row { display: flex; gap: 7px; margin-bottom: 14px; }
+  .filter-row:last-child { margin-bottom: 0; }
+  .filter-btn { flex: 1; padding: 9px 4px; border-radius: 8px; border: 2px solid var(--border); background: #fff; color: var(--gray); font-weight: 700; font-size: 12px; cursor: pointer; transition: all 0.15s; }
+  .filter-btn.active-teal { border-color: var(--teal); background: var(--teal-light); color: var(--teal); }
+  .filter-btn.active-orange { border-color: var(--orange); background: var(--orange-light); color: var(--orange); }
+  .start-btn { width: 100%; max-width: 400px; padding: 16px; border-radius: 14px; background: var(--navy); color: #fff; border: none; font-size: 16px; font-weight: 700; cursor: pointer; letter-spacing: 1px; }
+
+  /* ===== DRILL ===== */
+  #drill { display: none; flex-direction: column; align-items: center; padding: 16px 16px 40px; min-height: 100vh; }
+  .top-bar { display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 480px; margin-bottom: 12px; }
+  .top-bar-btn { background: none; border: none; color: var(--gray); cursor: pointer; font-size: 13px; padding: 4px 0; }
+  .top-counter { font-size: 13px; color: var(--gray); font-weight: 600; }
+  .top-streak { font-size: 13px; font-weight: 700; color: var(--gray); }
+  .top-streak.hot { color: var(--orange); }
+  .progress-bar { height: 5px; background: var(--border); border-radius: 3px; width: 100%; max-width: 480px; margin-bottom: 16px; }
+  .progress-fill { height: 100%; background: var(--teal); border-radius: 3px; transition: width 0.4s ease; }
+  .score-pill { display: flex; justify-content: flex-end; width: 100%; max-width: 480px; margin-bottom: 10px; }
+  .score-badge { font-size: 12px; background: var(--green-light); color: var(--green); padding: 3px 12px; border-radius: 20px; font-weight: 700; }
+  .q-card { background: var(--card); border-radius: 18px; padding: 22px 20px; border: 1.5px solid var(--border); width: 100%; max-width: 480px; margin-bottom: 14px; box-shadow: 0 4px 18px rgba(28,49,72,0.07); }
+  .tag-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+  .tag { font-size: 10px; padding: 3px 9px; border-radius: 20px; font-weight: 700; }
+  .tag-cat-t { background: var(--teal-light); color: var(--teal); }
+  .tag-cat-p { background: var(--orange-light); color: var(--orange); }
+  .tag-b1 { background: var(--blue-light); color: var(--blue); }
+  .tag-b2 { background: var(--purple-light); color: var(--purple); }
+  .tag-type { background: #F0F4FF; color: #3A5BD9; }
+  .sentence { font-size: 16px; color: var(--text); line-height: 2.1; font-weight: 500; margin-bottom: 8px; }
+  .blank-display { display: inline-block; min-width: 80px; padding: 2px 10px; margin: 0 4px; border-radius: 6px; text-align: center; font-weight: 700; font-size: 15px; border: 2px dashed var(--border); background: #F8FAFF; color: var(--gray); transition: all 0.2s; }
+  .blank-selected { border: 2px solid var(--teal); background: var(--teal-light); color: var(--teal); }
+  .blank-correct { border: 2px solid var(--green) !important; background: var(--green-light) !important; color: var(--green) !important; }
+  .blank-wrong { border: 2px solid var(--red) !important; background: var(--red-light) !important; color: var(--red) !important; }
+  .hint-box { margin-top: 10px; padding: 8px 12px; border-radius: 8px; background: #FFF8E8; border: 1px solid #F5D47A; font-size: 13px; color: #7A5C00; display: none; }
+  .options-wrap { display: flex; flex-direction: column; gap: 8px; width: 100%; max-width: 480px; margin-bottom: 14px; }
+  .opt-btn { padding: 13px 16px; border-radius: 10px; border: 1.5px solid var(--border); background: #fff; color: var(--text); font-weight: 600; font-size: 15px; cursor: pointer; text-align: left; display: flex; align-items: center; gap: 10px; transition: all 0.12s; width: 100%; }
+  .opt-circle { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; flex-shrink: 0; transition: all 0.12s; }
+  .opt-btn.sel { border-color: var(--teal); background: var(--teal-light); color: var(--teal); }
+  .opt-btn.sel .opt-circle { border-color: var(--teal); color: var(--teal); }
+  .opt-btn.correct { border-color: var(--green) !important; background: var(--green-light) !important; color: var(--green) !important; }
+  .opt-btn.correct .opt-circle { border-color: var(--green) !important; color: var(--green) !important; }
+  .opt-btn.wrong { border-color: var(--red) !important; background: var(--red-light) !important; color: var(--red) !important; }
+  .opt-btn.wrong .opt-circle { border-color: var(--red) !important; color: var(--red) !important; }
+  .explanation { padding: 13px 15px; border-radius: 12px; font-size: 14px; line-height: 1.7; width: 100%; max-width: 480px; margin-bottom: 12px; display: none; }
+  .expl-correct { background: var(--green-light); border: 1.5px solid var(--green); }
+  .expl-wrong { background: var(--red-light); border: 1.5px solid var(--red); }
+  .expl-title { font-weight: 700; margin-bottom: 4px; }
+  .expl-correct .expl-title { color: var(--green); }
+  .expl-wrong .expl-title { color: var(--red); }
+  .action-row { display: flex; gap: 10px; width: 100%; max-width: 480px; }
+  .hint-trigger { flex: 1; padding: 13px; border-radius: 10px; background: #fff; border: 1.5px solid var(--border); color: var(--gray); font-weight: 600; cursor: pointer; font-size: 14px; }
+  .check-btn { flex: 2; padding: 13px; border-radius: 10px; background: var(--navy); color: #fff; border: none; font-weight: 700; cursor: pointer; font-size: 15px; transition: all 0.15s; }
+  .check-btn:disabled { background: var(--border); color: #aaa; cursor: default; }
+  .next-btn { flex: 1; padding: 13px; border-radius: 10px; background: var(--teal); color: #fff; border: none; font-weight: 700; cursor: pointer; font-size: 15px; }
+
+  /* ===== REVIEW ===== */
+  #review { display: none; flex-direction: column; align-items: center; padding: 28px 16px 60px; min-height: 100vh; }
+  .review-emoji { font-size: 48px; text-align: center; margin-bottom: 8px; }
+  .review-title { font-size: 22px; font-weight: 800; color: var(--navy); text-align: center; margin-bottom: 4px; }
+  .review-pct { font-size: 40px; font-weight: 800; text-align: center; margin-bottom: 6px; }
+  .review-streak { color: var(--gray); font-size: 13px; text-align: center; margin-bottom: 24px; }
+  .wrong-title { font-weight: 700; color: var(--navy); margin-bottom: 12px; font-size: 15px; width: 100%; max-width: 480px; }
+  .wrong-card { background: var(--card); border-radius: 12px; padding: 15px 16px; margin-bottom: 10px; border: 1.5px solid var(--border); width: 100%; max-width: 480px; }
+  .wrong-sent { font-size: 14px; color: var(--text); margin: 8px 0 5px; line-height: 1.7; }
+  .wrong-ans { font-weight: 700; color: var(--red); font-size: 13px; }
+  .wrong-expl { font-size: 12px; color: #555; font-style: italic; line-height: 1.5; }
+  .home-again-btn { width: 100%; max-width: 480px; padding: 14px; border-radius: 12px; background: var(--navy); color: #fff; border: none; font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 8px; }
+</style>
+</head>
+<body>
+
+<!-- ===== HOME ===== -->
+<div id="home">
+  <div class="home-title-sub">OOPT Use of English 対策</div>
+  <h1 class="home-title">B2 時制 & 前置詞<br>コロケーション Drill</h1>
+  <p class="home-sub">1問1答・空欄に1語選ぶ形式<br>本番OOPTと同じ感覚で100問練習</p>
+
+  <div class="stats-row">
+    <div class="stat-box"><div class="stat-num" style="color:var(--teal)">50</div><div class="stat-label">時制問題</div></div>
+    <div class="stat-box"><div class="stat-num" style="color:var(--orange)">50</div><div class="stat-label">前置詞問題</div></div>
+    <div class="stat-box"><div class="stat-num" id="best-streak-home" style="color:var(--purple)">0</div><div class="stat-label">Best 🔥</div></div>
+  </div>
+
+  <div class="filter-card">
+    <div class="filter-label">カテゴリ</div>
+    <div class="filter-row" id="cat-row">
+      <button class="filter-btn active-teal" data-val="all" onclick="setFilter('cat','all',this)">すべて</button>
+      <button class="filter-btn" data-val="tense" onclick="setFilter('cat','tense',this)">時制のみ</button>
+      <button class="filter-btn" data-val="prep" onclick="setFilter('cat','prep',this)">前置詞のみ</button>
+    </div>
+    <div class="filter-label">並び順</div>
+    <div class="filter-row" id="order-row">
+      <button class="filter-btn active-teal" data-val="random" onclick="setFilter('order','random',this)">ランダム</button>
+      <button class="filter-btn" data-val="order" onclick="setFilter('order','order',this)">順番通り</button>
+    </div>
+  </div>
+
+  <button class="start-btn" onclick="startDrill()">▶ ドリルを始める</button>
+</div>
+
+<!-- ===== DRILL ===== -->
+<div id="drill">
+  <div class="top-bar">
+    <button class="top-bar-btn" onclick="goHome()">← ホーム</button>
+    <span class="top-counter" id="q-counter">1 / 100</span>
+    <span class="top-streak" id="streak-display">🔥 0</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+  <div class="score-pill"><span class="score-badge" id="score-badge">✓ 0 正解</span></div>
+
+  <div class="q-card">
+    <div class="tag-row" id="tag-row"></div>
+    <div class="sentence" id="sentence"></div>
+    <div class="hint-box" id="hint-box"></div>
+  </div>
+
+  <div class="options-wrap" id="options-wrap"></div>
+  <div class="explanation" id="explanation"></div>
+
+  <div class="action-row" id="action-row">
+    <button class="hint-trigger" id="hint-btn" onclick="showHint()">💡 ヒント</button>
+    <button class="check-btn" id="check-btn" disabled onclick="revealAnswer()">答え合わせ</button>
+  </div>
+</div>
+
+<!-- ===== REVIEW ===== -->
+<div id="review">
+  <div class="review-emoji" id="review-emoji">🎉</div>
+  <div class="review-title" id="review-title">結果</div>
+  <div class="review-pct" id="review-pct">0%</div>
+  <div class="review-streak" id="review-streak-disp"></div>
+  <div class="wrong-title" id="wrong-section-title"></div>
+  <div id="wrong-list"></div>
+  <button class="home-again-btn" onclick="goHome()">← ホームに戻る</button>
+</div>
+
+<script>
+// ========== 100 QUESTIONS ==========
+const ALL_Q = [
+// ===== TENSE (50) =====
+// --- Past Perfect ---
+{id:'t1',cat:'時制',tag:'過去完了',s:'By the time we arrived, the movie already _____ .',o:['started','had started','has started','was starting'],a:'had started',h:'by the time ... → 過去完了のシグナル',e:'過去のある時点より前の出来事 → 過去完了（had + p.p.）。"by the time"は過去完了の典型的なシグナル。'},
+{id:'t2',cat:'時制',tag:'過去完了',s:'When she arrived, the guests _____ already left.',o:['have','had','has','were'],a:'had',h:'already + left → had already left',e:'過去の時点より前の出来事 → had + p.p.（過去完了）。already と一緒に使われることが多い。'},
+{id:'t3',cat:'時制',tag:'過去完了',s:'I _____ never been to Japan before this trip.',o:['have','had','was','did'],a:'had',h:'"before this trip" → 過去の基準点あり',e:'"before this trip" という過去の基準点があるので現在完了ではなく過去完了 had never been を使う。'},
+{id:'t4',cat:'時制',tag:'過去完了',s:'She realized that she _____ her keys at home.',o:['left','had left','has left','was leaving'],a:'had left',h:'realized（過去）より前の出来事 → 過去完了',e:'realized（気づいた）より前にカギを置き忘れていた → 過去完了 had left。'},
+{id:'t5',cat:'時制',tag:'過去完了',s:'The train _____ by the time he reached the station.',o:['left','was leaving','had left','has left'],a:'had left',h:'by the time + 過去形 → 過去完了',e:'"by the time he reached"（着いた時にはもう）→ それ以前の出来事には過去完了。'},
+{id:'t6',cat:'時制',tag:'過去完了',s:'No Europeans _____ ever seen the places Marco Polo visited.',o:['have','had','has','were'],a:'had',h:'過去の話 → had ever seen（過去完了）',e:'過去の文脈での「それまで誰も見たことがなかった」→ 過去完了 had ever seen。had を選ぶ。'},
+{id:'t7',cat:'時制',tag:'過去完了',s:'He told me that he _____ the book three times.',o:['read','has read','had read','was reading'],a:'had read',h:'told me（過去）→ それ以前の経験 → 過去完了',e:'間接話法で過去より前のことを表す → 過去完了 had read。'},
+{id:'t8',cat:'時制',tag:'過去完了進行形',s:'She was exhausted because she _____ for the exam all night.',o:['studied','has studied','had studied','had been studying'],a:'had been studying',h:'疲れた原因 → それ以前の継続行為 → 過去完了進行形',e:'過去の状態の原因となった継続行為 → 過去完了進行形（had been + -ing）。exhausted という結果が強調される。'},
+{id:'t9',cat:'時制',tag:'過去完了進行形',s:'He was out of breath. He _____ fast for twenty minutes.',o:['ran','has been running','had been running','was running'],a:'had been running',h:'過去の状態（out of breath）の原因 → 過去完了進行形',e:'息が切れている（過去の状態）←その前に走り続けていた → 過去完了進行形 had been running。'},
+// --- Present Perfect vs Past Simple ---
+{id:'t10',cat:'時制',tag:'現在完了 vs 過去形',s:'I _____ see that movie last Saturday.',o:['have seen','saw','had seen','seen'],a:'saw',h:'"last Saturday" → 明確な過去の時点 → 過去形',e:'last Saturday という具体的な時点を示す語があるので現在完了は使えない。過去形 saw。'},
+{id:'t11',cat:'時制',tag:'現在完了 vs 過去形',s:'She _____ already finished her assignment.',o:['is','has','had','was'],a:'has',h:'already + finished → 現在完了（今の状態が重要）',e:'already は現在完了とよく使われる。"今すでに終わった"状態を表す → has already finished。'},
+{id:'t12',cat:'時制',tag:'現在完了 vs 過去形',s:'This is the best film I _____ ever seen.',o:['have','had','was','am'],a:'have',h:'This is the best ... I have ever + p.p.',e:'"the best ... I have ever seen" は現在完了の典型的な超級表現。have ever seen。'},
+{id:'t13',cat:'時制',tag:'現在完了 vs 過去形',s:'How long _____ you known each other?',o:['did','do','have','had'],a:'have',h:'"How long" + 現在まで続く状態 → 現在完了',e:'"How long have you known" = いつから知り合いですか（今も続いている）→ 現在完了。'},
+{id:'t14',cat:'時制',tag:'現在完了 vs 過去形',s:'He _____ to Paris three times so far.',o:['went','goes','has been','had been'],a:'has been',h:'"so far"（今まで）→ 現在完了のシグナル',e:'"so far" は現在完了と一緒に使う典型的な語。has been to = 〜に行ったことがある。'},
+// --- Present Perfect Continuous ---
+{id:'t15',cat:'時制',tag:'現在完了進行形',s:'She _____ working on the report since 8 AM.',o:['is','was','has been','had been'],a:'has been',h:'"since"（〜から今まで）→ 現在完了進行形',e:'"since 8 AM" は現在完了（進行形）のシグナル。今も続いている継続行為 → has been + -ing。'},
+{id:'t16',cat:'時制',tag:'現在完了進行形',s:'I _____ waiting for you for over an hour!',o:['am','was','have been','had been'],a:'have been',h:'"for + 時間"（今まで続いている）→ 現在完了進行形',e:'"for over an hour" + 現在完了進行形。今もまだ待っているニュアンス → have been waiting。'},
+{id:'t17',cat:'時制',tag:'現在完了進行形',s:'Why are you so tired? What _____ you been doing?',o:['have','had','are','were'],a:'have',h:'Why are you tired? → 今の状態の原因 → 現在完了進行形',e:'"What have you been doing?" = （最近ずっと）何をしていたの？現在完了進行形で尋ねる。'},
+// --- Future Perfect & Continuous ---
+{id:'t18',cat:'時制',tag:'未来完了',s:'By next year, she _____ completed her PhD.',o:['will complete','will have completed','is completing','has completed'],a:'will have completed',h:'"By next year"（来年までには）→ 未来完了',e:'"By + 未来の時点" → 未来完了（will have + p.p.）。その時点までに完了していることを表す。'},
+{id:'t19',cat:'時制',tag:'未来完了',s:'By the time you arrive, I _____ already cooked dinner.',o:['will cook','am going to cook','will have cooked','cook'],a:'will have cooked',h:'"By the time you arrive"（あなたが着く頃には）→ 未来完了',e:'"By the time + 現在形" の節と合わせて未来完了 will have + p.p. を使う。'},
+{id:'t20',cat:'時制',tag:'未来完了進行形',s:'By January, she _____ working here for ten years.',o:['will work','will have been working','has been working','would work'],a:'will have been working',h:'"By January" + 10年間という継続 → 未来完了進行形',e:'未来の時点までの継続行為の強調 → 未来完了進行形（will have been + -ing）。'},
+// --- Conditional / Subjunctive ---
+{id:'t21',cat:'時制',tag:'仮定法過去完了',s:'If she _____ the instructions, the accident would never have happened.',o:['followed','had followed','would follow','has followed'],a:'had followed',h:'"would have happened" → If + had + p.p.（仮定法過去完了）',e:'仮定法過去完了: If + had + p.p., would have + p.p. 「あの時〜していたら」という後悔・反実仮想。'},
+{id:'t22',cat:'時制',tag:'仮定法過去完了',s:'I wish I _____ studied harder for the exam.',o:['have','had','would have','was'],a:'had',h:'"I wish" + 過去完了 → 過去の後悔',e:'"I wish + had + p.p." で過去の後悔を表す。I wish I had studied = もっと勉強しておけばよかった。'},
+{id:'t23',cat:'時制',tag:'仮定法過去',s:'If I _____ you, I would accept the offer.',o:['am','was','were','had been'],a:'were',h:'"If I were you" = 仮定法過去の定型表現',e:'"If I were you" は仮定法過去の最も典型的な表現。主語に関わらず were を使う（フォーマルな文法）。'},
+{id:'t24',cat:'時制',tag:'仮定法過去',s:'If they _____ more staff, they could expand faster.',o:['have','had','would have','are having'],a:'had',h:'現在の仮定 → If + 過去形（仮定法過去）',e:'現在の事実と反対の仮定 → 仮定法過去: If + 過去形（had）, could + 動詞の原形。'},
+// --- Inversion ---
+{id:'t25',cat:'時制',tag:'倒置（仮定法）',s:'_____ I known about the problem earlier, I could have fixed it.',o:['If','Had','Should','Were'],a:'Had',h:'"If I had known" → if を省略 → "Had I known"',e:'仮定法過去完了の倒置形。If I had known → Had I known。if を省いて助動詞を前に出す。'},
+{id:'t26',cat:'時制',tag:'倒置（仮定法）',s:'_____ you need any help, please don\'t hesitate to call.',o:['If','Should','Had','Were'],a:'Should',h:'If you should need → Should you need（ifを省いた倒置）',e:'"Should you need ..." = "If you should need ..." の倒置形。丁寧・フォーマルな表現でよく使う。'},
+{id:'t27',cat:'時制',tag:'Not only 倒置',s:'Not only _____ he win the award, but he also received a grant.',o:['he did','did','does','had'],a:'did',h:'"Not only" + 助動詞 + 主語（倒置）',e:'"Not only" で文を始めると倒置が起きる。Not only did he win...（助動詞 did が主語 he の前に来る）。'},
+{id:'t28',cat:'時制',tag:'Not only 倒置',s:'Not only _____ the plan failed, but it also cost millions.',o:['did','had','has','was'],a:'did',h:'"Not only did + S + 動詞の原形" の形',e:'"Not only did the plan fail" — 倒置のため動詞は原形になる（fail）。助動詞 did が前に来る。'},
+{id:'t29',cat:'時制',tag:'Hardly 倒置',s:'Hardly _____ sat down when the phone rang.',o:['I had','had I','I have','have I'],a:'had I',h:'"Hardly had I ..." の語順（倒置）',e:'"Hardly had I + p.p. when ..." = 〜するやいなや。Hardly が文頭 → 倒置形（had I）。'},
+{id:'t30',cat:'時制',tag:'No sooner 倒置',s:'No sooner _____ the door when it started to rain.',o:['I opened','had I opened','I had opened','I open'],a:'had I opened',h:'"No sooner had I + p.p. than ..." の倒置形',e:'"No sooner had S + p.p. than ..." = 〜するやいなや。No sooner → 倒置（had I）。'},
+// --- Passive + Perfect ---
+{id:'t31',cat:'時制',tag:'受動態 + 完了形',s:'The missing documents are believed to _____ destroyed in the fire.',o:['be','have','have been','been'],a:'have been',h:'"believed to" + 完了受動不定詞（to have been done）',e:'be believed to + have been done（完了受動不定詞）。過去の出来事を現在の視点で表す。'},
+{id:'t32',cat:'時制',tag:'受動態 + 完了形',s:'She is thought to _____ left the country before the arrest.',o:['have','have been','be','had'],a:'have',h:'"thought to have + p.p." = 〜したと考えられている',e:'"be thought to have + p.p." = 〜したと考えられている。完了不定詞（to have + p.p.）を使う。'},
+{id:'t33',cat:'時制',tag:'受動態',s:'The letter _____ sent before the deadline, but it arrived late.',o:['was','had been','has been','is'],a:'had been',h:'arrived（過去）より前に送られた → 過去完了受動態',e:'"arrived late" という過去のより前に送られた → 過去完了受動態（had been sent）。'},
+// --- Used to / Would ---
+{id:'t34',cat:'時制',tag:'used to / would',s:'When I was young, I _____ spend summers at my grandparents\' house.',o:['used to','was used to','would use to','am used to'],a:'used to',h:'"used to + 動詞の原形" = かつては〜した（習慣）',e:'"used to + 動詞の原形" で過去の習慣を表す。"was used to" は「〜に慣れていた」で意味が違う。'},
+{id:'t35',cat:'時制',tag:'used to / would',s:'She _____ go jogging every morning, but she doesn\'t anymore.',o:['would','was used to','used to','is used to'],a:'used to',h:'今はもうしない過去の習慣 → "used to"（状態動詞もOK）',e:'"used to go" = かつては毎朝ジョギングしていた（今はしない）。would も習慣を表すが状態動詞と使えるのは used to のみ。'},
+// --- It is time / would rather ---
+{id:'t36',cat:'時制',tag:'It\'s time / would rather',s:'It\'s high time you _____ your homework.',o:['do','did','have done','are doing'],a:'did',h:'"It\'s (high) time + 主語 + 過去形"',e:'"It\'s high time + S + 過去形" で「そろそろ〜すべき」という意味。仮定法的用法。'},
+{id:'t37',cat:'時制',tag:'It\'s time / would rather',s:'I\'d rather you _____ tell anyone about this.',o:['don\'t','didn\'t','won\'t','haven\'t'],a:'didn\'t',h:'"I\'d rather + S + 過去形" = 〜してほしくない',e:'"I\'d rather you + 過去形" で「あなたに〜してほしい/してほしくない」という表現。過去形を使う。'},
+// --- Mixed Conditionals ---
+{id:'t38',cat:'時制',tag:'混合仮定法',s:'If she _____ harder last year, she would be in a better position now.',o:['worked','had worked','works','would work'],a:'had worked',h:'過去の仮定（had worked）→ 現在の結果（would be）',e:'混合仮定法: 過去の仮定（If + had + p.p.）+ 現在の結果（would + 動詞の原形）。'},
+{id:'t39',cat:'時制',tag:'混合仮定法',s:'If I _____ fluent in Japanese, I would have got the job last year.',o:['were','had been','am','would be'],a:'were',h:'現在の仮定（were）→ 過去の結果（would have got）',e:'混合仮定法の逆パターン: 現在の仮定（If I were ...）+ 過去の結果（would have + p.p.）。'},
+// --- Reported Speech ---
+{id:'t40',cat:'時制',tag:'時制の一致',s:'She said that she _____ the report the following day.',o:['will finish','would finish','is finishing','finishes'],a:'would finish',h:'said（過去）→ 時制を一致させる → would',e:'時制の一致: 主節が過去形（said）→ 従節の will → would に変換する間接話法。'},
+{id:'t41',cat:'時制',tag:'時制の一致',s:'He told me that he _____ to Paris the week before.',o:['has been','had been','went','goes'],a:'had been',h:'told（過去）+ the week before（さらに前）→ 過去完了',e:'時制の一致: told（過去）+ "the week before"（さらに前の出来事）→ 過去完了 had been。'},
+// --- Stative Verbs ---
+{id:'t42',cat:'時制',tag:'状態動詞',s:'I _____ this song sounds familiar.',o:['am thinking','think','was thinking','have thought'],a:'think',h:'think（考える・思う）は進行形にしない',e:'think（意見を持つ）は状態動詞なので進行形不可。"I think ..." で現在の意見を表す。'},
+{id:'t43',cat:'時制',tag:'状態動詞',s:'She _____ tired after the long journey.',o:['was seeming','has seemed','seemed','is seeming'],a:'seemed',h:'"seem"（〜のようだ）は状態動詞 → 進行形不可',e:'seem は状態動詞（進行形不可）。文脈が過去なので seemed が正しい。'},
+// --- will vs going to ---
+{id:'t44',cat:'時制',tag:'will vs going to',s:'Look at those clouds! It _____ rain.',o:['will','is going to','rains','is raining'],a:'is going to',h:'目に見える証拠（雲）から確信 → "going to"',e:'目に見える証拠から予測する場合は "going to"。will は意思・その場の決断に使う。'},
+{id:'t45',cat:'時制',tag:'will vs going to',s:'I\'ve made up my mind. I _____ take the job.',o:['will','am going to','would','am'],a:'am going to',h:'すでに決断している → "going to"',e:'"am going to" はすでに決断・計画済みのことに使う。"will" はその場の意思決定に使う。'},
+// --- Emphasis / Cleft ---
+{id:'t46',cat:'時制',tag:'強調構文',s:'It was only after the meeting _____ the error was discovered.',o:['when','which','that','where'],a:'that',h:'"It was ... that ..." の強調構文',e:'"It was + 強調する語句 + that ..." で特定の情報を強調する強調構文（cleft sentence）。'},
+{id:'t47',cat:'時制',tag:'強調構文',s:'It _____ Tom who broke the window, not Jane.',o:['was','is','were','has been'],a:'was',h:'過去の出来事の強調 → It was ... who ...',e:'"It was Tom who ..." で人を強調する強調構文。過去の出来事なので was を使う。'},
+// --- Participle Clauses ---
+{id:'t48',cat:'時制',tag:'分詞構文（完了）',s:'_____ trained as an engineer, she went on to become a celebrated architect.',o:['Having been','Being','Having','To have been'],a:'Having been',h:'主節より前の受動的な出来事 → "Having been + p.p."',e:'"Having been + p.p." = 完了受動分詞構文。主節の出来事より前に起きた受動的な出来事を表す。'},
+{id:'t49',cat:'時制',tag:'分詞構文',s:'_____ all her savings, she decided to invest in real estate.',o:['Having lost','Losing','Lost','To lose'],a:'Having lost',h:'主節（decided）より前の完了した出来事 → "Having + p.p."',e:'"Having + p.p." = 完了分詞構文。主節より前に完了した能動的な出来事を表す。'},
+{id:'t50',cat:'時制',tag:'時制の範囲',s:'Scientists have been studying this phenomenon _____ the 1980s.',o:['since','for','from','during'],a:'since',h:'現在完了 + 起点の時点 → since',e:'"have been studying" に対して「起点となる時点」を示すには since を使う。for は期間の長さ（for 40 years）。'},
+
+// ===== PREPOSITION (50) =====
+// --- Verb + Prep ---
+{id:'p1',cat:'前置詞',tag:'動詞 + 前置詞',s:'The success of the project depended _____ the cooperation of all departments.',o:['on','of','in','at'],a:'on',h:'"depend on" = 〜に依存する（onが必須）',e:'"depend on" は固定コロケーション。of は× — "depend of" とは言わない。'},
+{id:'p2',cat:'前置詞',tag:'動詞 + 前置詞',s:'She set _____ a voyage to explore uncharted territories.',o:['out on','out with','off with','up on'],a:'out on',h:'"set out on a voyage" = 航海に出る',e:'"set out" = 出発する、"on a voyage" = 航海で（on は手段・交通・活動に使う）。'},
+{id:'p3',cat:'前置詞',tag:'動詞 + 前置詞',s:'The committee decided to look _____ the allegations carefully.',o:['into','after','up','over'],a:'into',h:'"look into" = 調査する（investigate）',e:'"look into" = 調査する。look after = 世話する、look up = 調べる（辞書など）、look over = 見直す。'},
+{id:'p4',cat:'前置詞',tag:'動詞 + 前置詞',s:'The new policy will result _____ significant job losses.',o:['in','from','to','of'],a:'in',h:'"result in" = 〜という結果になる（原因→結果）',e:'"result in" = 〜をもたらす（原因→結果）。"result from" は反対で「〜から生じる」（結果→原因）。'},
+{id:'p5',cat:'前置詞',tag:'動詞 + 前置詞',s:'His sudden resignation resulted _____ a lack of communication.',o:['from','in','to','at'],a:'from',h:'"result from" = 〜が原因で生じる（結果←原因）',e:'"result from" は結果←原因の方向。「コミュニケーション不足が原因で辞任が生じた」→ resulted from。'},
+{id:'p6',cat:'前置詞',tag:'動詞 + 前置詞',s:'I can\'t concentrate _____ my work when it\'s so noisy.',o:['on','in','at','to'],a:'on',h:'"concentrate on" = 〜に集中する',e:'"concentrate on" は固定コロケーション。"focus on" と同様。"concentrate in" とは言わない。'},
+{id:'p7',cat:'前置詞',tag:'動詞 + 前置詞',s:'She has applied _____ three different universities.',o:['to','for','in','at'],a:'to',h:'"apply to" + 場所（大学・会社）',e:'"apply to" = 〜に応募する（場所に）。"apply for" = 〜を申請する（役職・奨学金）。両方重要。'},
+{id:'p8',cat:'前置詞',tag:'動詞 + 前置詞',s:'He applied _____ a scholarship to study abroad.',o:['for','to','in','at'],a:'for',h:'"apply for" + 申請するもの（奨学金・仕事）',e:'"apply for" = 〜を申請する・応募する（対象物）。apply to（場所）との区別に注意。'},
+{id:'p9',cat:'前置詞',tag:'動詞 + 前置詞',s:'The new technology will contribute _____ solving environmental problems.',o:['to','in','for','on'],a:'to',h:'"contribute to" = 〜に貢献する（to + 名詞 or -ing）',e:'"contribute to" の to は前置詞なので、後に動詞が来るときは -ing 形（contribute to solving）。'},
+{id:'p10',cat:'前置詞',tag:'動詞 + 前置詞',s:'The manager was blamed _____ the company\'s poor performance.',o:['for','of','about','on'],a:'for',h:'"be blamed for" = 〜のために責められる',e:'"blame A for B" = BについてAを責める。"be blamed for" = 〜のために責められる（受動態）。'},
+{id:'p11',cat:'前置詞',tag:'動詞 + 前置詞',s:'She succeeded _____ passing the exam on her first attempt.',o:['in','at','on','to'],a:'in',h:'"succeed in" + -ing = 〜することに成功する',e:'"succeed in + -ing" = 〜することに成功する。"succeed at" は× — in が正しい前置詞。'},
+{id:'p12',cat:'前置詞',tag:'動詞 + 前置詞',s:'The report consists _____ five chapters and a conclusion.',o:['of','in','from','with'],a:'of',h:'"consist of" = 〜から成る・構成される',e:'"consist of" = 〜から構成される（全体の成分）。"consist in" = 〜にある（本質）とは別。'},
+// --- Adj + Prep ---
+{id:'p13',cat:'前置詞',tag:'形容詞 + 前置詞',s:'She is very good _____ playing the piano.',o:['at','in','on','with'],a:'at',h:'"be good at" + スキル・能力',e:'"be good at" = 〜が得意。能力・スキルには at を使う。"be good in" は× （be good in a subject は非標準）。'},
+{id:'p14',cat:'前置詞',tag:'形容詞 + 前置詞',s:'He is not capable _____ making such a mistake.',o:['of','in','for','at'],a:'of',h:'"be capable of" = 〜できる能力がある（of + -ing）',e:'"be capable of" は固定コロケーション。of の後は名詞か動名詞（-ing）。'},
+{id:'p15',cat:'前置詞',tag:'形容詞 + 前置詞',s:'The new law is associated _____ a reduction in crime rates.',o:['with','to','by','for'],a:'with',h:'"be associated with" = 〜と関連している',e:'"be associated with" = 〜と結びついている・関連している。with が必須。'},
+{id:'p16',cat:'前置詞',tag:'形容詞 + 前置詞',s:'She was deeply committed _____ improving education in the region.',o:['to','in','for','on'],a:'to',h:'"be committed to" + 名詞 or -ing（toは前置詞）',e:'"be committed to" の to は前置詞。後に動詞が来るときは -ing 形（committed to improving）。'},
+{id:'p17',cat:'前置詞',tag:'形容詞 + 前置詞',s:'The children were afraid _____ making mistakes in class.',o:['of','from','about','for'],a:'of',h:'"be afraid of" = 〜を恐れる',e:'"be afraid of" は固定コロケーション。"be afraid to" は「恐ろしくて〜できない」と少し意味が変わる。'},
+{id:'p18',cat:'前置詞',tag:'形容詞 + 前置詞',s:'I\'m not familiar _____ the latest changes to the policy.',o:['with','of','to','in'],a:'with',h:'"be familiar with" = 〜をよく知っている・精通している',e:'"be familiar with" = 〜に精通している（withが必須）。"be familiar to" = 〜には馴染みがある（主語と目的語が逆になる）。'},
+{id:'p19',cat:'前置詞',tag:'形容詞 + 前置詞',s:'She is responsible _____ managing the entire department.',o:['for','of','in','to'],a:'for',h:'"be responsible for" = 〜に対して責任がある',e:'"be responsible for" = 〜に責任がある。for の後は名詞か動名詞（-ing）。'},
+{id:'p20',cat:'前置詞',tag:'形容詞 + 前置詞',s:'The results were consistent _____ our initial predictions.',o:['with','to','of','in'],a:'with',h:'"be consistent with" = 〜と一致している・矛盾しない',e:'"be consistent with" = 〜と整合性がある。科学・学術文で頻出。'},
+// --- Noun + Prep ---
+{id:'p21',cat:'前置詞',tag:'名詞 + 前置詞',s:'There was a significant increase _____ the number of applicants.',o:['in','of','on','at'],a:'in',h:'"an increase/decrease in" = 〜における増加/減少',e:'"an increase in" + 数量変化。"an increase of 10%" は変化量を示す（ofは違う用途）。'},
+{id:'p22',cat:'前置詞',tag:'名詞 + 前置詞',s:'The demand _____ renewable energy has grown substantially.',o:['for','of','in','to'],a:'for',h:'"demand for" = 〜に対する需要',e:'"demand for" = 〜への需要。"supply of" = 〜の供給。セットで覚えると便利。'},
+{id:'p23',cat:'前置詞',tag:'名詞 + 前置詞',s:'She has a strong belief _____ the power of education.',o:['in','of','on','at'],a:'in',h:'"belief in" = 〜への信念・信頼',e:'"belief in" = 〜を信じること。"have faith in" と同じ前置詞 in を使う。'},
+{id:'p24',cat:'前置詞',tag:'名詞 + 前置詞',s:'There was a lack _____ communication between the two teams.',o:['of','in','for','on'],a:'of',h:'"a lack of" = 〜の欠如・不足',e:'"a lack of" は固定表現。"lack of evidence"（証拠の欠如）"lack of sleep"（睡眠不足）など頻出。'},
+{id:'p25',cat:'前置詞',tag:'名詞 + 前置詞',s:'The solution to the problem depends _____ available resources.',o:['on','in','of','at'],a:'on',h:'"depend on" の名詞形でも on',e:'"the solution to the problem depends on ..." → "depend on" は名詞形でも同様に on を使う。'},
+// --- Prepositional Phrases ---
+{id:'p26',cat:'前置詞',tag:'前置詞フレーズ',s:'In terms _____ cost, this option is clearly the best.',o:['of','in','for','on'],a:'of',h:'"in terms of" = 〜という観点から（固定表現）',e:'"in terms of" は固定表現として丸ごと覚える。"in terms of cost / quality / time" など多用する。'},
+{id:'p27',cat:'前置詞',tag:'前置詞フレーズ',s:'With this _____ mind, we should revise our strategy.',o:['in','on','at','to'],a:'in',h:'"with ... in mind" = 〜を念頭に置いて',e:'"with ... in mind" は固定表現。エッセイの移行句や結論部分でよく使う。'},
+{id:'p28',cat:'前置詞',tag:'前置詞フレーズ',s:'The policy was introduced _____ order to reduce carbon emissions.',o:['in','on','at','for'],a:'in',h:'"in order to" = 〜するために（目的）',e:'"in order to" は目的を表す固定表現。"so as to" も同義。カジュアルな文では単に "to" だけでも可。'},
+{id:'p29',cat:'前置詞',tag:'前置詞フレーズ',s:'_____ the whole, the conference was a great success.',o:['On','In','By','At'],a:'On',h:'"on the whole" = 全体的に見て（固定表現）',e:'"on the whole" = 全体的に見ると・概して。"in general" と同義。評価・まとめの文脈で使う。'},
+{id:'p30',cat:'前置詞',tag:'前置詞フレーズ',s:'He agreed to help, _____ least for the time being.',o:['at','in','on','by'],a:'at',h:'"at least" = 少なくとも（固定表現）',e:'"at least" = 少なくとも。"at last"（ついに）との混同に注意。'},
+// --- Despite / In spite of ---
+{id:'p31',cat:'前置詞',tag:'despite / although',s:'The team completed the project on time _____ the numerous delays.',o:['despite','although','however','even'],a:'despite',h:'"despite + 名詞（句）"、"although + 節（SV）"',e:'"despite / in spite of" + 名詞句。"although" は節（主語+動詞）の前に使う接続詞なのでここでは不可。'},
+{id:'p32',cat:'前置詞',tag:'despite / although',s:'_____ being exhausted, she continued to work.',o:['Despite','Although','However','Even'],a:'Despite',h:'"Despite + -ing" = 〜にもかかわらず（動名詞と一緒に使える）',e:'"Despite + -ing" は自然な形。"Although she was exhausted" と書き換えられるが、ここは being のみなので Despite。'},
+// --- Time Prepositions ---
+{id:'p33',cat:'前置詞',tag:'時間の前置詞',s:'We arrived four years _____ after travelling through Persia.',o:['later','ago','before','after'],a:'later',h:'"later" = 過去の基準点から見た「後」（"ago" は現在が基準）',e:'"later" = （その時点から）〜後。"ago" = （今から）〜前。過去の話なので "later" が正しい。'},
+{id:'p34',cat:'前置詞',tag:'時間の前置詞',s:'She has been living in Tokyo _____ 2018.',o:['since','for','from','in'],a:'since',h:'"since + 起点の時点"（現在完了と共に）',e:'"since 2018" = 2018年から（今まで）。since は起点となる時点を示し、現在完了と使う。"for" は期間（for 5 years）。'},
+{id:'p35',cat:'前置詞',tag:'時間の前置詞',s:'I\'ll have finished the report _____ Friday.',o:['by','until','on','in'],a:'by',h:'"by Friday" = 金曜日までに（期限）',e:'"by" = 〜までに（完了の期限）。"until" = 〜まで（継続）。"I\'ll wait until Friday" vs "I\'ll finish by Friday"。'},
+{id:'p36',cat:'前置詞',tag:'時間の前置詞',s:'The office will be closed _____ next Monday.',o:['until','by','on','in'],a:'until',h:'"until next Monday" = 来週月曜日まで（継続）',e:'"until" = 〜まで（ある状態が継続する）。"by" は締め切りの完了。"closed until Monday" = 月曜まで閉まっている。'},
+// --- at / in / on ---
+{id:'p37',cat:'前置詞',tag:'at / in / on（時間）',s:'The meeting starts _____ 9 o\'clock sharp.',o:['at','in','on','by'],a:'at',h:'"at" + 特定の時刻',e:'"at" + 特定の時刻（at 9 o\'clock, at noon, at midnight）。時刻には常に at。'},
+{id:'p38',cat:'前置詞',tag:'at / in / on（場所）',s:'She works _____ a hospital in the city centre.',o:['at','in','on','for'],a:'at',h:'"at" + 特定の施設・場所（at a hospital）',e:'"at" = 特定の場所・施設（at a hospital, at school, at the station）。"in a hospital" は入院中のニュアンス。'},
+{id:'p39',cat:'前置詞',tag:'at / in / on（場所）',s:'There\'s an article about climate change _____ page 12.',o:['on','at','in','by'],a:'on',h:'"on page ..." = 〜ページに（on + 面・表面）',e:'"on page 12" = 12ページに。"on a page"（ページ上）は on。"in a book"（本の中）は in。'},
+// --- Phrasal Verbs ---
+{id:'p40',cat:'前置詞',tag:'句動詞',s:'The meeting has been called _____ due to bad weather.',o:['off','on','up','out'],a:'off',h:'"call off" = キャンセルする',e:'"call off" = 中止・キャンセルする。"call on" = 訪問する/求める、"call up" = 電話する、"call out" = 呼び出す。'},
+{id:'p41',cat:'前置詞',tag:'句動詞',s:'She looked _____ her younger siblings while their parents were away.',o:['after','into','over','up'],a:'after',h:'"look after" = 世話をする',e:'"look after" = 世話をする（take care of）。"look into" = 調査する、"look up" = 調べる。'},
+{id:'p42',cat:'前置詞',tag:'句動詞',s:'The company decided to cut _____ on unnecessary expenses.',o:['down','off','out','up'],a:'down',h:'"cut down on" = 〜を減らす',e:'"cut down on" = （量・頻度を）減らす。"cut off" = 切断する・遮断する、"cut out" = 切り取る/やめる。'},
+{id:'p43',cat:'前置詞',tag:'句動詞',s:'The new generation has grown _____ with social media.',o:['up','out','on','in'],a:'up',h:'"grow up" = 育つ・成長する',e:'"grow up" = 成長する・大人になる。"grow out of" = 〜を卒業する（子供の服など）。'},
+{id:'p44',cat:'前置詞',tag:'句動詞',s:'Could you please turn _____ the music? It\'s too loud.',o:['down','off','up','out'],a:'down',h:'"turn down" = 音量を下げる',e:'"turn down" = 音量を下げる / 断る。"turn off" = 消す、"turn up" = 音量を上げる・現れる。'},
+{id:'p45',cat:'前置詞',tag:'句動詞',s:'She had to come _____ with a new plan after the first one failed.',o:['up','out','across','over'],a:'up',h:'"come up with" = アイデアを思いつく',e:'"come up with" = （アイデア・解決策を）思いつく・考え出す（devise）。'},
+// --- Academic Phrases ---
+{id:'p46',cat:'前置詞',tag:'アカデミック表現',s:'With regard _____ the new regulations, further discussion is needed.',o:['to','of','for','in'],a:'to',h:'"with regard to" = 〜に関して（固定表現）',e:'"with regard to" = 〜に関して。"with respect to"（よりフォーマル）も同義。"regarding" に書き換え可。'},
+{id:'p47',cat:'前置詞',tag:'アカデミック表現',s:'The findings are _____ line with previous research.',o:['in','on','at','by'],a:'in',h:'"in line with" = 〜と一致して・〜に沿って',e:'"in line with" = 〜に沿っている・一致している。"out of line with"（〜と矛盾している）の反義語も重要。'},
+{id:'p48',cat:'前置詞',tag:'アカデミック表現',s:'Regardless _____ their background, all students deserve equal opportunities.',o:['of','from','about','to'],a:'of',h:'"regardless of" = 〜に関わらず（固定表現）',e:'"regardless of" は固定表現。"regardless of age / gender / experience" など。"irrespective of" も同義。'},
+{id:'p49',cat:'前置詞',tag:'アカデミック表現',s:'The study was conducted _____ accordance with ethical guidelines.',o:['in','on','at','by'],a:'in',h:'"in accordance with" = 〜に従って（固定表現）',e:'"in accordance with" = 〜に従って・準拠して。"in compliance with" も同義。法律・規則と一緒によく使う。'},
+{id:'p50',cat:'前置詞',tag:'アカデミック表現',s:'The success of the program was _____ large part due to strong leadership.',o:['in','on','by','at'],a:'in',h:'"in large part" = 大部分は（固定表現）',e:'"in large part" = 大部分は・主に。"in part" = ある程度は。"due to" の前に修飾語として使う。'},
+];
+
+// ===== STATE =====
+let questions = [];
+let idx = 0;
+let selected = null;
+let revealed = false;
+let results = [];
+let streak = 0;
+let bestStreak = 0;
+let hintShown = false;
+let catFilter = 'all';
+let orderFilter = 'random';
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function setFilter(type, val, btn) {
+  if (type === 'cat') {
+    catFilter = val;
+    document.querySelectorAll('#cat-row .filter-btn').forEach(b => {
+      b.classList.remove('active-teal');
+    });
+  } else {
+    orderFilter = val;
+    document.querySelectorAll('#order-row .filter-btn').forEach(b => {
+      b.classList.remove('active-teal');
+    });
+  }
+  btn.classList.add('active-teal');
+}
+
+function startDrill() {
+  let qs = [...ALL_Q];
+  if (catFilter === 'tense') qs = qs.filter(q => q.cat === '時制');
+  if (catFilter === 'prep') qs = qs.filter(q => q.cat === '前置詞');
+  if (orderFilter === 'random') qs = shuffle(qs);
+  questions = qs;
+  idx = 0; selected = null; revealed = false; results = []; streak = 0; hintShown = false;
+  document.getElementById('home').style.display = 'none';
+  document.getElementById('review').style.display = 'none';
+  document.getElementById('drill').style.display = 'flex';
+  renderQ();
+}
+
+function goHome() {
+  document.getElementById('drill').style.display = 'none';
+  document.getElementById('review').style.display = 'none';
+  document.getElementById('home').style.display = 'flex';
+  document.getElementById('best-streak-home').textContent = bestStreak;
+}
+
+function renderQ() {
+  const q = questions[idx];
+  const total = questions.length;
+
+  // progress
+  document.getElementById('q-counter').textContent = `${idx + 1} / ${total}`;
+  document.getElementById('progress-fill').style.width = `${(idx / total) * 100}%`;
+  document.getElementById('score-badge').textContent = `✓ ${results.filter(r=>r.correct).length} 正解`;
+  const st = document.getElementById('streak-display');
+  st.textContent = `🔥 ${streak}`;
+  st.className = 'top-streak' + (streak >= 3 ? ' hot' : '');
+
+  // tags
+  document.getElementById('tag-row').innerHTML =
+    `<span class="tag ${q.cat==='時制'?'tag-cat-t':'tag-cat-p'}">${q.cat}</span>` +
+    `<span class="tag tag-type">${q.tag}</span>`;
+
+  // sentence
+  const parts = q.s.split('_____');
+  document.getElementById('sentence').innerHTML =
+    parts[0] + `<span class="blank-display" id="blank-span">___</span>` + parts[1];
+
+  // hint
+  document.getElementById('hint-box').style.display = 'none';
+  document.getElementById('hint-box').textContent = '💡 ' + q.h;
+
+  // options
+  const wrap = document.getElementById('options-wrap');
+  wrap.innerHTML = '';
+  q.o.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt-btn';
+    btn.innerHTML = `<span class="opt-circle">${String.fromCharCode(65+i)}</span>${opt}`;
+    btn.onclick = () => selectOpt(opt, btn);
+    wrap.appendChild(btn);
+  });
+
+  // explanation
+  const expl = document.getElementById('explanation');
+  expl.style.display = 'none';
+
+  // action
+  document.getElementById('action-row').innerHTML = `
+    <button class="hint-trigger" id="hint-btn" onclick="showHint()">💡 ヒント</button>
+    <button class="check-btn" id="check-btn" disabled onclick="revealAnswer()">答え合わせ</button>
+  `;
+
+  selected = null; revealed = false; hintShown = false;
+}
+
+function selectOpt(opt, btn) {
+  if (revealed) return;
+  selected = opt;
+  document.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('sel'));
+  btn.classList.add('sel');
+  document.getElementById('blank-span').textContent = opt;
+  document.getElementById('blank-span').className = 'blank-display blank-selected';
+  document.getElementById('check-btn').disabled = false;
+}
+
+function showHint() {
+  document.getElementById('hint-box').style.display = 'block';
+  document.getElementById('hint-btn').disabled = true;
+}
+
+function revealAnswer() {
+  if (!selected || revealed) return;
+  revealed = true;
+  const q = questions[idx];
+  const correct = selected === q.a;
+  results.push({ id: q.id, correct });
+
+  if (correct) {
+    streak++;
+    if (streak > bestStreak) bestStreak = streak;
+  } else {
+    streak = 0;
+  }
+
+  // update blank
+  const blank = document.getElementById('blank-span');
+  blank.className = 'blank-display ' + (correct ? 'blank-correct' : 'blank-wrong');
+  blank.textContent = correct ? selected : selected;
+
+  // update options
+  document.querySelectorAll('.opt-btn').forEach((btn, i) => {
+    const opt = q.o[i];
+    btn.classList.remove('sel');
+    if (opt === q.a) {
+      btn.classList.add('correct');
+      btn.querySelector('.opt-circle').textContent = '✓';
+    } else if (opt === selected && !correct) {
+      btn.classList.add('wrong');
+      btn.querySelector('.opt-circle').textContent = '✗';
+    }
+  });
+
+  // explanation
+  const expl = document.getElementById('explanation');
+  expl.className = 'explanation ' + (correct ? 'expl-correct' : 'expl-wrong');
+  expl.innerHTML = `<div class="expl-title">${correct ? '✓ 正解！' : `✗ 不正解。正解: ${q.a}`}</div>${q.e}`;
+  expl.style.display = 'block';
+
+  // update streak display
+  const st = document.getElementById('streak-display');
+  st.textContent = `🔥 ${streak}`;
+  st.className = 'top-streak' + (streak >= 3 ? ' hot' : '');
+
+  // action
+  const isLast = idx + 1 >= questions.length;
+  document.getElementById('action-row').innerHTML =
+    `<button class="next-btn" onclick="nextQ()">${isLast ? '結果を見る →' : '次の問題 →'}</button>`;
+}
+
+function nextQ() {
+  if (idx + 1 >= questions.length) {
+    showReview();
+    return;
+  }
+  idx++;
+  renderQ();
+}
+
+function showReview() {
+  document.getElementById('drill').style.display = 'none';
+  document.getElementById('review').style.display = 'flex';
+
+  const score = results.filter(r => r.correct).length;
+  const total = results.length;
+  const pct = Math.round((score / total) * 100);
+
+  document.getElementById('review-emoji').textContent = pct >= 80 ? '🎉' : pct >= 50 ? '📚' : '💪';
+  document.getElementById('review-title').textContent = `結果: ${score} / ${total}`;
+  document.getElementById('review-pct').textContent = pct + '%';
+  document.getElementById('review-pct').style.color = pct >= 80 ? 'var(--green)' : pct >= 50 ? 'var(--orange)' : 'var(--red)';
+  document.getElementById('review-streak-disp').textContent = `🔥 最大連続正解: ${bestStreak}問`;
+
+  const wrong = questions.filter(q => results.find(r => r.id === q.id && !r.correct));
+  const wrongSection = document.getElementById('wrong-section-title');
+  const wrongList = document.getElementById('wrong-list');
+  wrongList.innerHTML = '';
+
+  if (wrong.length === 0) {
+    wrongSection.textContent = '🏆 全問正解！素晴らしい！';
+  } else {
+    wrongSection.textContent = `❌ 間違えた問題 (${wrong.length}問) — 復習しよう`;
+    wrong.forEach(q => {
+      const card = document.createElement('div');
+      card.className = 'wrong-card';
+      const parts = q.s.split('_____');
+      card.innerHTML = `
+        <div class="tag-row">
+          <span class="tag ${q.cat==='時制'?'tag-cat-t':'tag-cat-p'}">${q.cat}</span>
+          <span class="tag tag-type">${q.tag}</span>
+        </div>
+        <div class="wrong-sent">${parts[0]}<strong style="color:var(--red)">[${q.a}]</strong>${parts[1]}</div>
+        <div class="wrong-ans">正解: ${q.a}</div>
+        <div class="wrong-expl">💡 ${q.e}</div>
+      `;
+      wrongList.appendChild(card);
+    });
+  }
+}
+</script>
+</body>
+</html>
